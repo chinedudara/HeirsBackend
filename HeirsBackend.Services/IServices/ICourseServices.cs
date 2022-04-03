@@ -1,4 +1,5 @@
-﻿using HeirsBackend.Domain.Entities;
+﻿using HeirsBackend.Domain.DataObjects;
+using HeirsBackend.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace HeirsBackend.Services.IServices
 {
     public interface ICourseServices
     {
-        List<Person> GetAll();
+        List<Course> GetAll();
+        bool UploadCourses(List<CourseObj> courses);
     }
 }

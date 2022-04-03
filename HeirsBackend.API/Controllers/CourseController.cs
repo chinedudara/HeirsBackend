@@ -1,4 +1,5 @@
-﻿using HeirsBackend.Domain.Entities;
+﻿using HeirsBackend.Domain.DataObjects;
+using HeirsBackend.Domain.Entities;
 using HeirsBackend.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,9 +23,10 @@ namespace HeirsBackend.API.Controllers
         }
 
         [HttpPost("/uploadcourses")]
-        public IActionResult UploadCourses(List<Course> courses)
+        public IActionResult UploadCourses([FromBody] CourseUploadDTO courses)
         {
-            return Ok();
+            var res = _courseService.UploadCourses(courses.courses);
+            return Ok(res);
         }
     }
 }

@@ -14,5 +14,6 @@ namespace HeirsBackend.Services.IServices
         List<Person> GetPersons();
         bool UploadCourses(List<CourseObj> courses);
         bool UploadPersons(List<PersonObj> persons);
+        PersonalProgressVieModel GetProgress(string id);
     }
 }

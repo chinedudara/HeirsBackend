@@ -42,5 +42,12 @@ namespace HeirsBackend.API.Controllers
             var res = _courseService.UploadPersons(requestObj.persons);
             return Ok(res);
         }
+
+        [HttpGet("/reportpersonalprogress/{id}")]
+        public IActionResult GetGPA(string id)
+        {
+            var res = _courseService.GetProgress(id);
+            return Ok(res);
+        }
     }
 }

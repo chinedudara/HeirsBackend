@@ -92,5 +92,23 @@ namespace HeirsBackend.Services.Services
                 return false;
             }
         }
+
+        public PersonalProgressVieModel GetProgress(string id)
+        {
+            PersonalProgressVieModel model = new PersonalProgressVieModel();
+            var courses = GetCourses();
+            List<Person> personList = _context.Persons.Where(x => x.PersonId == id).ToList();
+            personList.ForEach(person =>
+            {
+                string courseName = courses.First(x => x.Id == person.CourseId).Name;
+                if (!string.IsNullOrEmpty(courseName)) {
+                    model.courses.Add(courseName); 
+                };
+            });
+
+            model.gpa = personList.Sum(x => x.Score.Value) / personList.Count;
+            model.name = personList.FirstOrDefault().Name;
+            return model;
+        }
     }
 }

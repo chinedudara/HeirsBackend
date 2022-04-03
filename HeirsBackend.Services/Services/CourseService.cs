@@ -18,33 +18,79 @@ namespace HeirsBackend.Services.Services
             _context = context;
         }
 
-        public List<Course> GetAll()
+        public List<Course> GetCourses()
         {
             return _context.Courses.ToList();
         }
 
+        public List<Person> GetPersons()
+        {
+            return _context.Persons.ToList();
+        }
+
         public bool UploadCourses(List<CourseObj> courses)
         {
-            List<Course> courseList = new List<Course>();
-            courses.ForEach(course =>
+            try
             {
-                if (!_context.Courses.Any(x => x.Id == course.id))
+                List<Course> courseList = new List<Course>();
+                courses.ForEach(course =>
                 {
-                    courseList.Add(new Course
+                    if (!_context.Courses.Any(x => x.Id == course.id))
                     {
-                        Id = course.id,
-                        Name = course.name
-                    });
-                }
-            });
+                        courseList.Add(new Course
+                        {
+                            Id = course.id,
+                            Name = course.name
+                        });
+                    }
+                });
 
-            _context.Courses.AddRange(courseList);
-            var res = _context.SaveChanges();
-            if (res > 0)
-            {
-                return true;
+                _context.Courses.AddRange(courseList);
+                var res = _context.SaveChanges();
+                if (res > 0)
+                {
+                    return true;
+                }
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool UploadPersons(List<PersonObj> persons)
+        {
+            try
+            {
+                List<Person> personList = new List<Person>();
+                persons.ForEach(person =>
+                {
+                    if (!_context.Persons.Any(x => x.PersonId == person.person_id && x.CourseId == person.course_id))
+                    {
+                        personList.Add(new Person
+                        {
+                            Id = person.person_id + person.course_id,
+                            PersonId = person.person_id,
+                            Name = person.name,
+                            Score = person.score,
+                            CourseId = person.course_id
+                        });
+                    }
+                });
+
+                _context.Persons.AddRange(personList);
+                var res = _context.SaveChanges();
+                if (res > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

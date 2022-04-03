@@ -10,7 +10,9 @@ namespace HeirsBackend.Services.IServices
 {
     public interface ICourseServices
     {
-        List<Course> GetAll();
+        List<Course> GetCourses();
+        List<Person> GetPersons();
         bool UploadCourses(List<CourseObj> courses);
+        bool UploadPersons(List<PersonObj> persons);
     }
 }

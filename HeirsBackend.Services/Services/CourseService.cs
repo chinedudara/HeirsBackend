@@ -35,6 +35,11 @@ namespace HeirsBackend.Services.Services
                 List<Course> courseList = new List<Course>();
                 courses.ForEach(course =>
                 {
+                    if (string.IsNullOrEmpty(course.id) || string.IsNullOrEmpty(course.name))
+                    {
+                        return;
+                    }
+
                     if (!_context.Courses.Any(x => x.Id == course.id))
                     {
                         courseList.Add(new Course
@@ -95,18 +100,17 @@ namespace HeirsBackend.Services.Services
 
         public PersonalProgressVieModel GetProgress(string id)
         {
-            PersonalProgressVieModel model = new PersonalProgressVieModel();
+            int totalScore = 0;
             var courses = GetCourses();
+            PersonalProgressVieModel model = new PersonalProgressVieModel();
             List<Person> personList = _context.Persons.Where(x => x.PersonId == id).ToList();
             personList.ForEach(person =>
             {
-                string courseName = courses.First(x => x.Id == person.CourseId).Name;
-                if (!string.IsNullOrEmpty(courseName)) {
-                    model.courses.Add(courseName); 
-                };
+                model.courses.Add(courses.First(x => x.Id == person.CourseId).Name);
+                totalScore += (person.Score == null) ? 0 : person.Score.GetValueOrDefault();
             });
 
-            model.gpa = personList.Sum(x => x.Score.Value) / personList.Count;
+            model.gpa = totalScore / personList.Count;
             model.name = personList.FirstOrDefault().Name;
             return model;
         }
